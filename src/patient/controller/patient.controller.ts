@@ -20,27 +20,27 @@ export class PatientController {
   }
 
   @Post()
-  async addPatient(@Body() pacient: PatientVO): Promise<PatientVO> {
+  async addPatient(@Body() patient: PatientVO): Promise<PatientVO> {
     const addedPatient: PatientDTO = await this.service.addPatient(
       deserialize<PatientDTO>(
         PatientDTO,
-        serialize<PatientVO>(pacient),
+        serialize<PatientVO>(patient),
       ),
     );
     return deserialize<PatientVO>(PatientVO, serialize<PatientDTO>(addedPatient));
   }
 
   @Put(':id')
-  async editPatient(@Body() pacient: PatientVO, @Param('id') id: number): Promise<PatientVO> {
+  async editPatient(@Body() patient: PatientVO, @Param('id') id: string): Promise<PatientVO> {
     const changedPatient: PatientDTO = await this.service.editPatient(
       id,
-      pacient,
+      patient,
     );
     return deserialize<PatientVO>(PatientVO, serialize<PatientDTO>(changedPatient));
   }
 
   @Delete()
-  async deletePatient(@Param('id') id: number): Promise<void> {
+  async deletePatient(@Param('id') id: string): Promise<void> {
     await this.service.deletePatient(id);
   }
 }

@@ -1,5 +1,5 @@
 export class PatientVO {
-  id: number;
+  id: string;
   name: string;
   sex: string;
   birthdayDay: number;
@@ -7,7 +7,7 @@ export class PatientVO {
   birthdayYear: number;
 
   constructor(
-    id: number,
+    id: string,
     name: string,
     sex: string,
     birthdayDay: number,

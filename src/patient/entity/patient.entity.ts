@@ -3,22 +3,22 @@ import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
 @Entity('pacient')
 export class Patient {
 
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @Column({length: 100, name: 'nome_paciente'})
+  @Column({length: 100, name: 'nm_patient', type: 'varchar'})
   name: string;
 
-  @Column('text')
+  @Column({name: 'ds_sex', type: 'varchar', length: 20})
   sex: string;
 
-  @Column({name: 'dia_nascimento'})
+  @Column({name: 'ds_birthday_day', type: 'int64'})
   birthdayDay: number;
 
-  @Column({name: 'mes_nascimento'})
+  @Column({name: 'ds_birthday_month', type: 'int64'})
   birthdayMonth: number;
 
-  @Column({name: 'ano_nascimento'})
+  @Column({name: 'ds_birthday_year', type: 'int64'})
   birthdayYear: number;
 
 }

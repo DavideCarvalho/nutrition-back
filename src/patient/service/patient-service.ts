@@ -17,22 +17,25 @@ export class PatientService {
     );
   }
 
-  async addPatient(pacient: PatientDTO): Promise<PatientDTO> {
+  async addPatient(patient: PatientDTO): Promise<PatientDTO> {
     return deserialize<PatientDTO>(
       PatientDTO,
-      serialize<Patient>(await this.repository.create(pacient)),
+      serialize<Patient>(await this.repository.create(patient)),
     );
   }
 
-  async editPatient(id: number, pacient: PatientDTO): Promise<PatientDTO> {
-    const foundPacient: Patient = await this.repository.findOneOrFail(id);
+  async editPatient(id: string, patient: PatientDTO): Promise<PatientDTO> {
+    const foundPatient: PatientDTO = deserialize<PatientDTO>(
+      PatientDTO,
+      serialize<Patient>(await this.repository.findOneOrFail(id)),
+    );
     return deserialize<PatientDTO>(
       PatientDTO,
-      serialize<Patient>(await this.repository.save<Patient>({...foundPacient, ...pacient})),
+      serialize<Patient>(await this.repository.save<Patient>({...foundPatient, ...patient})),
     );
   }
 
-  async deletePatient(id: number): Promise<void> {
+  async deletePatient(id: string): Promise<void> {
     await this.repository.delete({ id });
   }
 }
