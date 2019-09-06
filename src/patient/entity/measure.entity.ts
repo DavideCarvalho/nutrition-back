@@ -1,8 +1,9 @@
 import {Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn} from 'typeorm';
 import {Patient} from './patient.entity';
+import {Observability} from '../../commons/entity';
 
 @Entity()
-export class Measure {
+export class Measure extends Observability {
 
   @PrimaryGeneratedColumn('uuid')
   id: string;
