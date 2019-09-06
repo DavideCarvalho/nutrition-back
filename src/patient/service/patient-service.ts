@@ -1,13 +1,14 @@
-import {PatientDTO} from '../dto';
-import {PatientRepository} from '../repository';
+import {MeasureDTO, PatientDTO} from '../dto';
+import {MeasureRepository, PatientRepository} from '../repository';
 import {deserialize, deserializeArray, serialize} from 'class-transformer';
-import {Patient} from '../entity';
+import {Measure, Patient} from '../entity';
 import {Injectable} from '@nestjs/common';
 
 @Injectable()
 export class PatientService {
 
-  constructor(private readonly repository: PatientRepository) {
+  constructor(private readonly repository: PatientRepository,
+              private readonly measureRepository: MeasureRepository) {
   }
 
   async getPatientList(): Promise<PatientDTO[]> {
@@ -25,10 +26,7 @@ export class PatientService {
   }
 
   async editPatient(id: string, patient: PatientDTO): Promise<PatientDTO> {
-    const foundPatient: PatientDTO = deserialize<PatientDTO>(
-      PatientDTO,
-      serialize<Patient>(await this.repository.findOneOrFail(id)),
-    );
+    const foundPatient: Patient = await this.repository.findOneOrFail(id);
     return deserialize<PatientDTO>(
       PatientDTO,
       serialize<Patient>(await this.repository.save<Patient>({...foundPatient, ...patient})),
@@ -36,6 +34,15 @@ export class PatientService {
   }
 
   async deletePatient(id: string): Promise<void> {
-    await this.repository.delete({ id });
+    await this.repository.delete({id});
+  }
+
+  async addPatientMeasure(id: string, measure: MeasureDTO): Promise<PatientDTO> {
+    const foundPatient: Patient = await this.repository.findOneOrFail({id});
+    await this.measureRepository.save<Measure>({...measure, patient: foundPatient});
+    return deserialize<PatientDTO>(
+      PatientDTO,
+      serialize<Patient>(await this.repository.findOne({id})),
+    );
   }
 }

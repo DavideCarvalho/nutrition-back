@@ -1,4 +1,5 @@
-import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import {Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn} from 'typeorm';
+import {Measure} from './measure.entity';
 
 @Entity('pacient')
 export class Patient {
@@ -20,5 +21,8 @@ export class Patient {
 
   @Column({name: 'ds_birthday_year', type: 'int64'})
   birthdayYear: number;
+
+  @OneToMany<Measure>(_ => Patient, (measure: Measure) => measure.patient)
+  measures: Measure[];
 
 }

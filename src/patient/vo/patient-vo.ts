@@ -1,24 +1,21 @@
-export class PatientVO {
-  id: string;
-  name: string;
-  sex: string;
-  birthdayDay: number;
-  birthdayMonth: number;
-  birthdayYear: number;
+import {deserialize, serialize} from 'class-transformer';
+import {PatientDTO} from '../dto';
 
+export class PatientVO {
   constructor(
-    id: string,
-    name: string,
-    sex: string,
-    birthdayDay: number,
-    birthdayMonth: number,
-    birthdayYear: number,
+    public id: string,
+    public name: string,
+    public sex: string,
+    public birthdayDay: number,
+    public birthdayMonth: number,
+    public birthdayYear: number,
   ) {
-    this.id = id;
-    this.name = name;
-    this.sex = sex;
-    this.birthdayDay = birthdayDay;
-    this.birthdayMonth = birthdayMonth;
-    this.birthdayYear = birthdayYear;
+  }
+
+  transformToDTO(): PatientDTO {
+    return deserialize<PatientDTO>(
+      PatientDTO,
+      serialize<PatientVO>(this),
+    );
   }
 }

@@ -1,9 +1,9 @@
 import {Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
 import {Constants} from '../../commons';
 import {PatientService} from '../service';
-import {deserialize, deserializeArray, serialize} from 'class-transformer';
+import {deserializeArray, serialize} from 'class-transformer';
 import {PatientDTO} from '../dto';
-import {PatientVO} from '../vo';
+import {MeasureVO, PatientVO} from '../vo';
 
 @Controller(`${Constants.API_PREFIX}/${Constants.API_VERSION_1}/pacient`)
 export class PatientController {
@@ -22,25 +22,31 @@ export class PatientController {
   @Post()
   async addPatient(@Body() patient: PatientVO): Promise<PatientVO> {
     const addedPatient: PatientDTO = await this.service.addPatient(
-      deserialize<PatientDTO>(
-        PatientDTO,
-        serialize<PatientVO>(patient),
-      ),
+      patient.transformToDTO(),
     );
-    return deserialize<PatientVO>(PatientVO, serialize<PatientDTO>(addedPatient));
+    return addedPatient.transformToVO();
   }
 
   @Put(':id')
   async editPatient(@Body() patient: PatientVO, @Param('id') id: string): Promise<PatientVO> {
     const changedPatient: PatientDTO = await this.service.editPatient(
       id,
-      patient,
+      patient.transformToDTO(),
     );
-    return deserialize<PatientVO>(PatientVO, serialize<PatientDTO>(changedPatient));
+    return changedPatient.transformToVO();
   }
 
   @Delete()
   async deletePatient(@Param('id') id: string): Promise<void> {
     await this.service.deletePatient(id);
+  }
+
+  @Post(':id/measure')
+  async addPatientMeasure(@Body() measure: MeasureVO, @Param('id') id: string): Promise<PatientVO> {
+    const patientWithAddedMeasure: PatientDTO = await this.service.addPatientMeasure(
+      id,
+      measure.transformToDTO(),
+    );
+    return patientWithAddedMeasure.transformToVO();
   }
 }

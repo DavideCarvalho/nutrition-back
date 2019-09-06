@@ -1,4 +1,4 @@
-import {Column, Entity, OneToOne, PrimaryGeneratedColumn} from 'typeorm';
+import {Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn} from 'typeorm';
 import {Patient} from './patient.entity';
 
 @Entity()
@@ -16,7 +16,7 @@ export class Measure {
   @Column({ name: 'ds_weight', type: 'int64' })
   weight: number;
 
-  @OneToOne<Measure>(_ => Patient, (measure: Measure) => measure.patient)
+  @ManyToOne<Patient>(_ => Patient, (patient: Patient) => patient.measures)
   patient: Patient;
 
   day: number;
