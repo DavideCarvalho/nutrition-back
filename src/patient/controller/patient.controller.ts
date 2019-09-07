@@ -1,9 +1,10 @@
 import {Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
 import {Constants} from '../../commons';
 import {PatientService} from '../service';
-import {deserializeArray, serialize} from 'class-transformer';
+import {deserialize, deserializeArray, serialize} from 'class-transformer';
 import {PatientDTO} from '../dto';
 import {MeasureVO, PatientVO} from '../vo';
+import {Patient} from '../entity';
 
 @Controller(`${Constants.API_PREFIX}/${Constants.API_VERSION_1}/pacient`)
 export class PatientController {
@@ -12,28 +13,26 @@ export class PatientController {
   }
 
   @Get()
-  async getPatientList(): Promise<PatientVO[]> {
-    return deserializeArray<PatientVO>(
-      PatientVO,
-      serialize<PatientDTO[]>(await this.service.getPatientList()),
-    );
+  async getPatientList(): Promise<PatientDTO[]> {
+    const patientList: Patient[] = await this.service.getPatientList();
+    return this.transformEntityArrayToDTOArray<Patient, PatientDTO>(patientList, PatientDTO);
   }
 
   @Post()
-  async addPatient(@Body() patient: PatientVO): Promise<PatientVO> {
-    const addedPatient: PatientDTO = await this.service.addPatient(
+  async addPatient(@Body() patient: PatientVO): Promise<PatientDTO> {
+    const addedPatient: Patient = await this.service.addPatient(
       patient.transformToDTO(),
     );
-    return addedPatient.transformToVO();
+    return this.transformEntityToDTO<Patient, PatientDTO>(addedPatient, PatientDTO);
   }
 
   @Put(':id')
-  async editPatient(@Body() patient: PatientVO, @Param('id') id: string): Promise<PatientVO> {
-    const changedPatient: PatientDTO = await this.service.editPatient(
+  async editPatient(@Body() patient: PatientVO, @Param('id') id: string): Promise<PatientDTO> {
+    const changedPatient: Patient = await this.service.editPatient(
       id,
       patient.transformToDTO(),
     );
-    return changedPatient.transformToVO();
+    return this.transformEntityToDTO<Patient, PatientDTO>(changedPatient, PatientDTO);
   }
 
   @Delete()
@@ -42,11 +41,25 @@ export class PatientController {
   }
 
   @Post(':id/measure')
-  async addPatientMeasure(@Body() measure: MeasureVO, @Param('id') id: string): Promise<PatientVO> {
-    const patientWithAddedMeasure: PatientDTO = await this.service.addPatientMeasure(
+  async addPatientMeasure(@Body() measure: MeasureVO, @Param('id') id: string): Promise<PatientDTO> {
+    const patientWithAddedMeasure: Patient = await this.service.addPatientMeasure(
       id,
       measure.transformToDTO(),
     );
-    return patientWithAddedMeasure.transformToVO();
+    return this.transformEntityToDTO<Patient, PatientDTO>(patientWithAddedMeasure, PatientDTO);
+  }
+
+  private transformEntityToDTO<Entity, DTO>(entity: Entity, dtoClass: any) {
+    return deserialize<DTO>(
+      dtoClass,
+      serialize<Entity>(entity),
+    );
+  }
+
+  private transformEntityArrayToDTOArray<Entity, DTO>(entity: Entity[], dtoClass: any) {
+    return deserializeArray<DTO>(
+      dtoClass,
+      serialize<Entity>(entity),
+    );
   }
 }

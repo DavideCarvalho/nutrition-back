@@ -8,13 +8,13 @@ export class Measure extends Observability {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'ds_hip', type: 'int64' })
+  @Column({ name: 'ds_hip', type: 'smallint' })
   hip: number;
 
-  @Column({ name: 'ds_waist', type: 'int64' })
+  @Column({ name: 'ds_waist', type: 'smallint' })
   waist: number;
 
-  @Column({ name: 'ds_weight', type: 'int64' })
+  @Column({ name: 'ds_weight', type: 'smallint' })
   weight: number;
 
   @ManyToOne<Patient>(_ => Patient, (patient: Patient) => patient.measures)

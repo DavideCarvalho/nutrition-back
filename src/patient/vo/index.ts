@@ -1,2 +1,2 @@
-export { PatientVO } from './patient-vo';
-export { MeasureVO } from './measure.vo';
+export {PatientVO} from './patient.vo';
+export {MeasureVO} from './measure.vo';

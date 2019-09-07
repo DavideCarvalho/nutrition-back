@@ -1,6 +1,8 @@
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import {Measure} from './measure.entity';
 import {Observability} from '../../commons/entity';
+import {deserialize, serialize} from 'class-transformer';
+import {PatientDTO} from '../dto';
 
 @Entity('pacient')
 export class Patient extends Observability {
@@ -14,13 +16,13 @@ export class Patient extends Observability {
   @Column({name: 'ds_sex', type: 'varchar', length: 20})
   sex: string;
 
-  @Column({name: 'ds_birthday_day', type: 'int64'})
+  @Column({name: 'ds_birthday_day', type: 'smallint'})
   birthdayDay: number;
 
-  @Column({name: 'ds_birthday_month', type: 'int64'})
+  @Column({name: 'ds_birthday_month', type: 'smallint'})
   birthdayMonth: number;
 
-  @Column({name: 'ds_birthday_year', type: 'int64'})
+  @Column({name: 'ds_birthday_year', type: 'smallint'})
   birthdayYear: number;
 
   @OneToMany<Measure>(_ => Patient, (measure: Measure) => measure.patient)

@@ -1,6 +1,5 @@
-import {CreateDateColumn, Entity, UpdateDateColumn, VersionColumn} from 'typeorm';
+import {CreateDateColumn, UpdateDateColumn, VersionColumn} from 'typeorm';
 
-@Entity()
 export abstract class Observability {
 
   @CreateDateColumn()

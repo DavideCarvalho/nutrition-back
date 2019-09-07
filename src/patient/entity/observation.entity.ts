@@ -1,5 +1,4 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
-import {Patient} from './patient.entity';
+import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
 import {Observability} from '../../commons/entity';
 
 @Entity()
@@ -8,15 +7,13 @@ export class Observation extends Observability {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({name: 'ds_observation', type: 'int64'})
+  @Column({name: 'ds_observation', type: 'smallint'})
   hip: number;
 
-  @Column({name: 'ds_waist', type: 'int64'})
+  @Column({name: 'ds_waist', type: 'smallint'})
   waist: number;
 
-  @Column({name: 'ds_weight', type: 'int64'})
+  @Column({name: 'ds_weight', type: 'smallint'})
   weight: number;
 
-  @ManyToOne<Patient>(_ => Patient, (patient: Patient) => patient.measures)
-  patient: Patient;
 }
