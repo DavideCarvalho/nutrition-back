@@ -6,7 +6,7 @@ import {PatientDTO} from '../dto';
 import {MeasureVO, PatientVO} from '../vo';
 import {Patient} from '../entity';
 
-@Controller(`${Constants.API_PREFIX}/${Constants.API_VERSION_1}/pacient`)
+@Controller(`${Constants.API_PREFIX}/${Constants.API_VERSION_1}/patient`)
 export class PatientController {
 
   constructor(private readonly service: PatientService) {
